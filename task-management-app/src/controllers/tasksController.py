@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from src.dtos.taskDto import CreateTaskDTO
 from sqlalchemy.orm import Session
 from src.models.taskModel import TaskModel
@@ -26,3 +27,15 @@ def get_tasks(db:Session):
         "message" : "successfully fetch the tasks",
         "data": tasks
     }
+
+
+def get_one_task(task_id:int,db:Session): 
+    one_task = db.query(TaskModel).get(task_id)
+    if not one_task:
+        raise HTTPException(404,"task not found")
+    return {
+        "status" :200,
+        "message" :"Task Fetched Successfully",
+        "data" : one_task
+    }
+    
