@@ -38,4 +38,22 @@ def get_one_task(task_id:int,db:Session):
         "message" :"Task Fetched Successfully",
         "data" : one_task
     }
-    
+
+def update_task(body:TaskModel,task_id:int,db:Session):
+    task_exsit = db.query(TaskModel).get(task_id)
+    if not task_exsit:
+        raise HTTPException(404,"task not found")
+
+    task_exsit.title = body.title
+    task_exsit.description = body.description
+    task_exsit.is_completed = body.is_completed
+
+    db.add(task_exsit)
+    db.commit()
+    db.refresh(task_exsit)
+
+    return {
+        "status" : 200,
+        "message":"Task Updated successfully",
+        "data" : task_exsit
+    }
