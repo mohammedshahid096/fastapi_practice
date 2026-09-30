@@ -63,3 +63,17 @@ def update_task(body:CreateTaskDTO,task_id:int,db:Session):
         "message":"Task Updated successfully",
         "data" : task_exsit
     }
+
+
+def delete_task(task_id:int,db=Session):
+    task_exsit = db.query(TaskModel).get(task_id)
+    if not task_exsit:
+        raise HTTPException(404,"task not found")
+
+    db.delete(task_exsit)
+    db.commit()
+
+    return {
+        "status":200,
+        "message" :"successfully deleted the task"
+    }
