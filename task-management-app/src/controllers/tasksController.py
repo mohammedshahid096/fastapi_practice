@@ -77,3 +77,22 @@ def delete_task(task_id:int,db=Session):
         "status":200,
         "message" :"successfully deleted the task"
     }
+
+
+# best practices in the code
+def better_practice_with_response_code():
+    return {"message":"status code will be 201"}
+
+
+def get_one_specicific_task(task_id,db=Session):
+    one_task = db.query(TaskModel).get(task_id)
+    if not one_task:
+            raise HTTPException(404,"task not found")
+    return one_task
+
+
+
+def get_task_list_limited_keys(db:Session):
+    tasks = db.query(TaskModel).all()
+    return tasks
+
