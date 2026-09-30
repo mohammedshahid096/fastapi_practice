@@ -17,3 +17,12 @@ def create_task(body:CreateTaskDTO,db:Session):
         "message" :"task created successfully",
         "data":new_task
     }
+
+
+def get_tasks(db:Session):
+    tasks = db.query(TaskModel).all()
+    return {
+        "status" :200,
+        "message" : "successfully fetch the tasks",
+        "data": tasks
+    }
