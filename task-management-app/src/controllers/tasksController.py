@@ -39,14 +39,20 @@ def get_one_task(task_id:int,db:Session):
         "data" : one_task
     }
 
-def update_task(body:TaskModel,task_id:int,db:Session):
+def update_task(body:CreateTaskDTO,task_id:int,db:Session):
     task_exsit = db.query(TaskModel).get(task_id)
     if not task_exsit:
         raise HTTPException(404,"task not found")
 
-    task_exsit.title = body.title
-    task_exsit.description = body.description
-    task_exsit.is_completed = body.is_completed
+# individual updating
+    # task_exsit.title = body.title
+    # task_exsit.description = body.description
+    # task_exsit.is_completed = body.is_completed
+
+# if there are many fileds then we can goo with this
+    body = body.model_dump()
+    for field, value in body.items():
+        setattr(task_exsit,field,value)
 
     db.add(task_exsit)
     db.commit()
