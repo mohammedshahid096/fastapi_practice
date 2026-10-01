@@ -49,5 +49,5 @@ def get_task_list_limited_keys(db=Depends(get_db)):
 
 # db type define
 @task_routes.get("/get-task-list-limited-keys",response_model=List[TaskResponseTitleDto], status_code=status.HTTP_200_OK)
-def get_task_list_limited_keys(db:Session=Depends(get_db)):
+def get_task_list_limited_keys_type(db:Session=Depends(get_db)):
     return tasksController.get_task_list_limited_keys(db)
