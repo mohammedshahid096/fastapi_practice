@@ -12,3 +12,13 @@ class CreateUserResponseDTO(BaseModel):
     name:str
     username:str
     email:str
+
+
+class LoginDTO(BaseModel):
+    username:str
+    password:str
+
+
+class LoginResponseDTO(BaseModel):
+    data:CreateUserResponseDTO
+    auth_token:str
