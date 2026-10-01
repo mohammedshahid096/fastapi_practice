@@ -50,8 +50,8 @@ def update_task(body:CreateTaskDTO,task_id:int,db:Session):
     # task_exsit.is_completed = body.is_completed
 
 # if there are many fileds then we can goo with this
-    body = body.model_dump()
-    for field, value in body.items():
+    data = body.model_dump()
+    for field, value in data.items():
         setattr(task_exsit,field,value)
 
     db.add(task_exsit)
@@ -65,7 +65,7 @@ def update_task(body:CreateTaskDTO,task_id:int,db:Session):
     }
 
 
-def delete_task(task_id:int,db=Session):
+def delete_task(task_id:int,db:Session):
     task_exsit = db.query(TaskModel).get(task_id)
     if not task_exsit:
         raise HTTPException(404,"task not found")
@@ -84,7 +84,7 @@ def better_practice_with_response_code():
     return {"message":"status code will be 201"}
 
 
-def get_one_specicific_task(task_id,db=Session):
+def get_one_specicific_task(task_id:int,db:Session):
     one_task = db.query(TaskModel).get(task_id)
     if not one_task:
             raise HTTPException(404,"task not found")
