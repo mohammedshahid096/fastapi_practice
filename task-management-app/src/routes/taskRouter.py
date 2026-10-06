@@ -4,11 +4,12 @@ from sqlalchemy.orm import Session
 from src.config.db import get_db
 from src.controllers import tasksController 
 from src.dtos.taskDto import CreateTaskDTO,TaskResponseTitleDto
+from src.middleware.authentication import Authentication
 
 task_routes = APIRouter(prefix="/tasks")
 
 @task_routes.post("/create")
-def create_task(body:CreateTaskDTO,db = Depends(get_db)):
+def create_task(body:CreateTaskDTO,db = Depends(get_db),user = Depends(Authentication)):
     return tasksController.create_task(body,db)
 
 
