@@ -4,18 +4,19 @@ from sqlalchemy.orm import Session
 from src.config.db import get_db
 from src.controllers import tasksController 
 from src.dtos.taskDto import CreateTaskDTO,TaskResponseTitleDto
-from src.middleware.authentication import Authentication
+from src.middleware.authentication import Authentication,Authorization
+from src.models.userModel import UserModel
 
 task_routes = APIRouter(prefix="/tasks")
 
 @task_routes.post("/create")
-def create_task(body:CreateTaskDTO,db = Depends(get_db),user = Depends(Authentication)):
-    return tasksController.create_task(body,db)
+def create_task(body:CreateTaskDTO,db: Session = Depends(get_db),user:UserModel = Depends(Authentication)):
+    return tasksController.create_task(body,db,user)
 
 
 @task_routes.get("/all_tasks")
-def get_all_Tasks(db = Depends(get_db)):
-    return tasksController.get_tasks(db)
+def get_all_Tasks(db = Depends(get_db),user:UserModel = Depends(Authentication)):
+    return tasksController.get_tasks(db,user)
 
 
 @task_routes.get("/all_task/{task_id}")
@@ -52,3 +53,13 @@ def get_task_list_limited_keys(db=Depends(get_db)):
 @task_routes.get("/get-task-list-limited-keys",response_model=List[TaskResponseTitleDto], status_code=status.HTTP_200_OK)
 def get_task_list_limited_keys_type(db:Session=Depends(get_db)):
     return tasksController.get_task_list_limited_keys(db)
+
+
+# for testing authorisation
+@task_routes.get("/authorisation",status_code=status.HTTP_200_OK)
+def check_authorisation(user=Depends(Authorization(allowed_roles=["admin","user"]))):
+    return {
+        "status":200,
+        "message":"you are authorised to access this resource",
+        "data":user
+    }

@@ -80,3 +80,62 @@ For example:
 ```python
 from routers.users import router
 ```
+
+# Alembic Database Migrations
+
+## Initialize Alembic
+
+To initialize Alembic migrations in the project, run:
+
+```bash
+alembic init migrations
+```
+
+This creates a `migrations` directory with the required Alembic configuration and migration files.
+
+### Generated Structure
+
+```text
+project/
+├── migrations/
+│   ├── versions/
+│   ├── env.py
+│   ├── script.py.mako
+│   └── README
+├── alembic.ini
+└── ...
+```
+
+### Create a Migration
+
+After making changes to your SQLAlchemy models:
+
+```bash
+alembic revision --autogenerate -m "comit_message_will_come_here"
+```
+
+### Apply Migrations
+
+Run all pending migrations:
+
+```bash
+alembic upgrade head
+```
+
+### Check Current Migration
+
+```bash
+alembic current
+```
+
+### View Migration History
+
+```bash
+alembic history
+```
+
+### Roll Back the Last Migration
+
+```bash
+alembic downgrade -1
+```

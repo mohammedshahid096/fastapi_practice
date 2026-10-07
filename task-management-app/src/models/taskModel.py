@@ -10,5 +10,5 @@ class TaskModel(Base):
     description = Column(String)
     is_completed = Column(Boolean,default=False)
     user_id = Column(Integer,ForeignKey("user_table.id",ondelete="CASCADE"))
-    created_at = Column(DateTime,default=datetime.utcnow,nullable=False)
+    created_at = Column(DateTime,default=datetime.utcnow,  nullable=False)
     updated_at = Column(DateTime,default=datetime.utcnow,onupdate=datetime.utcnow,nullable=False)
