@@ -5,17 +5,18 @@ from src.config.db import get_db
 from src.controllers import tasksController 
 from src.dtos.taskDto import CreateTaskDTO,TaskResponseTitleDto
 from src.middleware.authentication import Authentication
+from src.models.userModel import UserModel
 
 task_routes = APIRouter(prefix="/tasks")
 
 @task_routes.post("/create")
-def create_task(body:CreateTaskDTO,db = Depends(get_db),user = Depends(Authentication)):
-    return tasksController.create_task(body,db)
+def create_task(body:CreateTaskDTO,db: Session = Depends(get_db),user:UserModel = Depends(Authentication)):
+    return tasksController.create_task(body,db,user)
 
 
 @task_routes.get("/all_tasks")
-def get_all_Tasks(db = Depends(get_db)):
-    return tasksController.get_tasks(db)
+def get_all_Tasks(db = Depends(get_db),user:UserModel = Depends(Authentication)):
+    return tasksController.get_tasks(db,user)
 
 
 @task_routes.get("/all_task/{task_id}")

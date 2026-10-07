@@ -2,12 +2,14 @@ from fastapi import HTTPException
 from src.dtos.taskDto import CreateTaskDTO
 from sqlalchemy.orm import Session
 from src.models.taskModel import TaskModel
+from src.models.userModel import UserModel
 
-def create_task(body:CreateTaskDTO,db:Session):
+def create_task(body:CreateTaskDTO,db:Session,user:UserModel):
     data = body.model_dump()
     new_task = TaskModel(title = data["title"],
                          description = data["description"],
-                         is_completed = data["is_completed"]
+                         is_completed = data["is_completed"],
+                         user_id = user.id
                          )
     db.add(new_task)
     db.commit()
@@ -20,8 +22,8 @@ def create_task(body:CreateTaskDTO,db:Session):
     }
 
 
-def get_tasks(db:Session):
-    tasks = db.query(TaskModel).all()
+def get_tasks(db:Session,user:UserModel):
+    tasks = db.query(TaskModel).filter(TaskModel.user_id == user.id).all()
     return {
         "status" :200,
         "message" : "successfully fetch the tasks",
