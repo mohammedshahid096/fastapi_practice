@@ -32,4 +32,15 @@ def Authentication(request:Request,db:Session = Depends(get_db)):
     return dbUser
 
 
-    
+def Authorization(allowed_roles:list[str]):
+    def check_authorization(user= Depends(Authentication)):
+        currentRole = "user"
+        # currentRole = user.role
+        if currentRole not in allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You don't have permission to access this resource"
+            )
+
+        return user
+    return check_authorization
